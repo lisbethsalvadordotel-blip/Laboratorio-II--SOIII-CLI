@@ -1,67 +1,123 @@
-Comandos utilizados, práctica laboratorio 2.1: Gestión de Paquetes y Directorios, Rocky Linux.
+Comandos utilizados, práctica laboratorio 2.1:
+Gestión de Paquetes y Directorios en Rocky Linux
 
-============================================
+============================================================
 
-*/ Actualizar los paquetes y directorios, y descargar nuevas versiones:
+# Actualizar los repositorios y paquetes del sistema
 
-sudo dnf update && upgrade
+sudo dnf update -y
+sudo dnf upgrade -y
 
-*/ Ver la lista de repositorios existentes:
+# Verificar repositorios actualmente en uso
 
 dnf repolist
 
-*/ Buscar una herramienta dentro de los repositorios y paquetes del sistema (Bashtop):
+EJEMPLO:
+appstream
+baseos
+epel
+
+------------------------------------------------------------
+
+# Buscar la herramienta en los repositorios (Bashtop)
 
 dnf search bashtop
 
-*/ Instalar las herramientas EPEL (Extra Packages for Enterprise Linux)
-
-sudo dnf install epel-release -y
-
-*/ Instalar la herramienta Bashtop, si se encuentra en los paquetes EPEL;
+# Si aparece en la lista, instalar directamente
 
 sudo dnf install bashtop -y
 
-*/ Si Bashtop no se encuentra, clonamos los repositorios de Git:
+------------------------------------------------------------
 
+# Si NO aparece, instalar EPEL (repositorio adicional)
+
+sudo dnf install epel-release -y
+
+# Verificar que EPEL fue agregado
+
+dnf repolist
+
+# Buscar nuevamente la herramienta
+
+dnf search bashtop
+
+# Instalar la herramienta
+
+sudo dnf install bashtop -y
+
+------------------------------------------------------------
+
+# Si aun no se encuentra, instalar manualmente desde GitHub
+
+# Clonar repositorio
 sudo git clone https://github.com/aristocratos/bashtop.git
 
-*/ Nos posicionamos en el archivo clonado:
+# Entrar al directorio
+cd bashtop
 
-cd bashtop 
-
-*/ Descargamos la herramienta:
-
-sudo make install
-
-*/ Si no tenemos la herramienta correspondiente para el comando "make install", la descargamos:
-
+# Instalar herramientas necesarias
 sudo dnf groupinstall "Development Tools" -y
 
-*/ Luego de instalar, ejecutamos Bashtop:
+# Instalar bashtop manualmente
+sudo make install
+
+------------------------------------------------------------
+
+# Ejecutar la herramienta
 
 bashtop
 
-*/ Eliminamos la herramienta utilizando el administrador de paquetes (en caso de haberla instalado con el mismo):
+EJEMPLO:
+Se muestra el monitor de CPU, RAM y procesos
+
+------------------------------------------------------------
+
+# Desinstalar la herramienta (si fue instalada con dnf)
 
 sudo dnf remove bashtop -y
 
-*/ Removemos archivos de configuración de la herramienta:
+------------------------------------------------------------
+
+# Eliminar archivos de configuración
 
 rm -rf ~/.config/bashtop
 
-*/ Eliminando archivos residuales:
+------------------------------------------------------------
+
+# Eliminar dependencias que ya no se usan
 
 sudo dnf autoremove -y
 
-*/ Eliminamos el binario principal de Bashtop si lo descargamos manualmente:
+------------------------------------------------------------
 
+# Si fue instalada manualmente, eliminar archivos restantes
+
+# Eliminar binario principal
 sudo rm -f /usr/local/bin/bashtop
 
-*/ Buscamos más restos de la herramienta:
-
+# Buscar restos del programa
 sudo find /usr/local -iname 'bashtop'
 
-*/ Eliminamos los archivos residuales encontrados:
-
+# Eliminar archivos encontrados
 sudo rm -rf /usr/local/share/doc/bashtop
+
+------------------------------------------------------------
+
+# Verificación final
+
+which bashtop
+
+EJEMPLO:
+(no output) → herramienta eliminada correctamente
+
+------------------------------------------------------------
+
+# COMANDOS DE APOYO
+
+dnf repolist
+dnf search nombre_paquete
+dnf install nombre_paquete -y
+dnf remove nombre_paquete -y
+dnf autoremove -y
+
+------------------------------------------------------------
